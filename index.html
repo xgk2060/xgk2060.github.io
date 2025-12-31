@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打砖块休闲小游戏</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 游戏头部 -->
+        <header class="game-header">
+            <h1><i class="fas fa-gamepad"></i> 打砖块休闲小游戏</h1>
+            <p class="game-subtitle">挑战30个精心设计的关卡！(休闲模式)</p>
+        </header>
+
+        <!-- 游戏信息显示 -->
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">当前关卡</div>
+                <div class="info-value" id="currentLevel">1</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">分数</div>
+                <div class="info-value" id="score">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">生命</div>
+                <div class="info-value" id="lives">5</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">难度</div>
+                <div class="info-value" id="gameDifficulty">简单</div>
+            </div>
+        </div>
+
+        <!-- 游戏内容区域 -->
+        <main class="game-content">
+            <!-- 游戏画布容器 -->
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+                <!-- 开始界面 -->
+                <div class="game-overlay" id="startOverlay">
+                    <div class="overlay-title">打砖块</div>
+                    <div class="overlay-subtitle">休闲模式，放松游玩！</div>
+                    <div class="overlay-message">
+                        使用键盘左右箭头控制挡板，反弹小球击碎所有砖块！<br>
+                        游戏共有30个精心设计的关卡，难度逐步提升！<br>
+                        休闲模式：球速较慢，生命值增加，更容易上手！
+                    </div>
+                    <button class="btn btn-primary" id="startGameBtn">
+                        <i class="fas fa-play"></i> 开始游戏
+                    </button>
+                </div>
+
+                <!-- 暂停界面 -->
+                <div class="game-overlay" id="pauseOverlay" style="display: none;">
+                    <div class="overlay-title">游戏暂停</div>
+                    <div class="overlay-subtitle">游戏已暂停</div>
+                    <div class="overlay-message">
+                        点击继续按钮返回游戏
+                    </div>
+                    <button class="btn btn-primary" id="resumeBtn">
+                        <i class="fas fa-play"></i> 继续游戏
+                    </button>
+                </div>
+
+                <!-- 游戏结束界面 -->
+                <div class="game-overlay" id="gameOverOverlay" style="display: none;">
+                    <div class="overlay-title" id="gameOverTitle">游戏结束</div>
+                    <div class="overlay-subtitle" id="gameOverSubtitle"></div>
+                    <div class="overlay-message" id="gameOverMessage"></div>
+                    <button class="btn btn-primary" id="restartBtn">
+                        <i class="fas fa-redo"></i> 重新开始
+                    </button>
+                </div>
+            </div>
+
+            <!-- 游戏控制按钮 -->
+            <div class="controls">
+                <button class="btn btn-secondary" id="pauseBtn">
+                    <i class="fas fa-pause"></i> 暂停游戏
+                </button>
+                <button class="btn btn-warning" id="restartLevelBtn">
+                    <i class="fas fa-sync-alt"></i> 重新开始关卡
+                </button>
+                <button class="btn btn-success" id="nextLevelBtn">
+                    <i class="fas fa-forward"></i> 下一关
+                </button>
+            </div>
+
+            <!-- 关卡选择器 -->
+            <div class="level-selector" id="levelSelector">
+                <h3>选择关卡 (休闲模式：速度较慢，生命值更多)</h3>
+                <div class="level-buttons" id="levelButtons">
+                    <!-- 关卡按钮将通过JavaScript生成 -->
+                </div>
+                <div class="difficulty-info">
+                    <span class="difficulty easy"><i class="fas fa-circle"></i> 简单</span>
+                    <span class="difficulty medium"><i class="fas fa-circle"></i> 中等</span>
+                    <span class="difficulty hard"><i class="fas fa-circle"></i> 困难</span>
+                </div>
+            </div>
+
+            <!-- 游戏说明 -->
+            <div class="instructions">
+                <h4><i class="fas fa-info-circle"></i> 游戏说明 (休闲模式)</h4>
+                <div class="instructions-content">
+                    <p><strong>控制方式：</strong> 键盘左右方向键控制挡板移动</p>
+                    <p><strong>砖块分数：</strong> 灰色(10分) 蓝色(20分) 绿色(30分) 黄色(40分) 红色(50分) 棕色(30分, 2生命) 紫色(50分, 3生命)</p>
+                    <p><strong>关卡设计：</strong> 游戏共有30个精心设计的关卡，难度逐步提升</p>
+                    <p><strong>休闲模式：</strong> 球速较慢，挡板变宽，生命值增加到5条</p>
+                    <p><strong>速度系统：</strong> 击碎砖块会缓慢增加速度，最高可达2倍速</p>
+                    <p><strong>特殊功能：</strong> 空格键暂停游戏，按R键重新开始当前关卡，N键进入下一关</p>
+                    <p><strong>控制说明：</strong>
+                    ← → : 控制挡板移动<br>
+                    空格键 : 暂停/继续游戏<br>
+                    R键 : 重新开始当前关卡<br>
+                    N键 : 下一关</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 游戏页脚 -->
+        <footer class="game-footer">
+            <p>打砖块游戏 &copy; 2025 | 休闲模式，30个精心设计的关卡</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript文件 -->
+    <script src="levels.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
